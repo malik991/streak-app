@@ -1,33 +1,20 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
+  @tailwind components;
+  @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+select,
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    @apply block w-full mb-2 rounded-lg;
+    @apply border p-2 border-secondry bg-gray-100;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.form-label{
+  @apply text-secondry text-sm font-semibold leading-tight;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+/* .form-label + .form-input {
+  margin-top: -8px;
+} */
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}

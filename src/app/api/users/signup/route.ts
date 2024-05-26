@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   const client = await pool.connect();
   try {
     const emailExist = await client.query(
-      "select * from users where email = $1",
+      `select * from users where email = $1 and "isVerified" = true`,
       [email]
     );
     if (emailExist.rows.length > 0) {

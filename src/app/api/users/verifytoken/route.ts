@@ -2,7 +2,8 @@ import pool from "@/lib/DbConnection";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { token } = await req.json();
+  const { searchParams } = new URL(req.url);
+  const token = searchParams.get("token");
   if (!token) {
     return NextResponse.json(
       { success: false, message: "token is not valid" },

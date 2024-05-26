@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { emailOptions } from "@/types/emailOptions";
-import { uuid } from "uuidv4";
+import { v4 as uuidv4 } from "uuid";
 import pool from "@/lib/DbConnection";
 import fs from "fs";
 import ejs from "ejs";
@@ -19,7 +19,7 @@ export const sendEmail = async (
       localClient = await pool.connect();
     }
 
-    const hashedToken = uuid();
+    const hashedToken = uuidv4();
     const template = fs.readFileSync(
       "src/components/layout/emailTemplate.ejs",
       "utf8"
@@ -34,7 +34,7 @@ export const sendEmail = async (
 
     const fromEmail = process.env.SEND_FROM_EMAIL;
     if (emailType === "VERIFY") {
-      const timestamp = Date.now() + 120000; //3600000; // Adds 1 hour to the current timestamp
+      const timestamp = Date.now() + 3600000; // Adds 1 hour to the current timestamp
       const tokenExpiry: any = new Date(timestamp); // Converts timestamp to ISO format
 
       await localClient.query("BEGIN");
