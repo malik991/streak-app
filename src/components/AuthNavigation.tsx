@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 export interface AuthNavigationProps {
   userName: string;
@@ -44,7 +45,7 @@ export interface AuthNavigationProps {
 
 function AuthNavigation(inputParam: AuthNavigationProps): any {
   if (inputParam.status === "loading") {
-    return "wait";
+    return <Loader2 className="animate-spin" />;
   }
   if (inputParam.status === "authenticated") {
     return (
