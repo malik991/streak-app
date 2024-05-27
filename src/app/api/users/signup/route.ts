@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     );
     if (emailExist.rows.length > 0) {
       return Response.json(
-        { success: false, error: "user already registered." },
+        { success: false, message: "user already registered." },
         { status: 400 }
       );
     }

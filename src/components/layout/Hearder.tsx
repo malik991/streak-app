@@ -1,8 +1,18 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../../public/Logo.svg";
+import { useSession } from "next-auth/react";
+import AuthNavigation from "../AuthNavigation";
 
 export default function Header() {
+  const session = useSession();
+  const userData = session?.data?.user;
+  let userName = userData?.name || userData?.email;
+  if (userName && userName.includes(" ")) {
+    userName = userName.split(" ")[0];
+  }
+
   return (
     <header className="">
       <div className="flex items-center justify-between p-3">
@@ -18,15 +28,10 @@ export default function Header() {
           </Link>
         </nav>
         <nav className="flex items-center lg:gap-x-5 font-semibold">
-          <Link href={"/login"} className="text-secondry text-lg">
-            Login
-          </Link>
-          <Link
-            href={"/signup"}
-            className="bg-primary px-5 py-1 text-white rounded-lg"
-          >
-            Register
-          </Link>
+          <AuthNavigation
+            userName={userName?.toString() || ""}
+            status={session?.status || "unauthenticated"}
+          />
         </nav>
       </div>
     </header>

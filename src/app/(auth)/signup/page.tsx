@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Loader } from "lucide-react";
 import { useDebounceCallback } from "usehooks-ts";
 import { useRouter } from "next/navigation";
@@ -21,6 +22,7 @@ import { signUpValidation } from "@/schemas/signupSchema";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import Link from "next/link";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 export default function signupPage() {
@@ -74,8 +76,7 @@ export default function signupPage() {
   const onSubmit = async (data: z.infer<typeof signUpValidation>) => {
     setIsSubitting(true);
     try {
-      console.log("Data for signup form: ", data);
-      const res = await axios.post("/api/sign-up", data);
+      const res = await axios.post("/api/users/signup", data);
       if (res.data.success) {
         toast({
           title: "Success",
@@ -88,7 +89,7 @@ export default function signupPage() {
           variant: "destructive",
         });
       }
-      router.replace(`/verify/${username}`);
+      router.replace(`/verifyemail`);
     } catch (error) {
       console.error("Error during sign-up submitting:", error);
       const axiosError = error as any;
@@ -107,7 +108,7 @@ export default function signupPage() {
 
   return (
     <section className="mt-8">
-      <div className="flex flex-col items-start gap-y-3 max-w-sm mx-auto p-3">
+      <div className="flex flex-col items-start gap-y-3 max-w-sm mx-auto p-6 shadow-md bg-gray-50">
         <div className="">
           <h1
             className="text-primary text-4xl"
@@ -124,7 +125,7 @@ export default function signupPage() {
           <Form {...register}>
             <form
               onSubmit={register.handleSubmit(onSubmit)}
-              className="space-y-5"
+              className="space-y-2"
             >
               <FormField
                 name="username"
@@ -191,6 +192,18 @@ export default function signupPage() {
                   </FormItem>
                 )}
               />
+              <div className="w-full flex items-start py-2">
+                <div className="flex space-x-1 items-center">
+                  <Checkbox id="terms1" className="w-3.5 h-3.5" />
+                  <label
+                    htmlFor="terms1"
+                    className="text-xs text-secondry font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    by signup, you are agree with our{" "}
+                    <span className="underline text-black">user aggrement</span>
+                  </label>
+                </div>
+              </div>
               <Button
                 type="submit"
                 className="w-full text-white"
@@ -207,6 +220,17 @@ export default function signupPage() {
             </form>
           </Form>
         </div>
+      </div>
+      <div className="text-center mt-4">
+        <p>
+          Already a member?{" "}
+          <Link
+            href="/signin"
+            className="text-primary hover:text-terniry font-semibold"
+          >
+            Sign in
+          </Link>
+        </p>
       </div>
     </section>
   );
