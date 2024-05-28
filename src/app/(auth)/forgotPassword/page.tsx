@@ -100,7 +100,7 @@ export default function forgotPassPage() {
           <Form {...register}>
             <form
               onSubmit={register.handleSubmit(onSubmit)}
-              className="space-y-2"
+              className="space-y-4"
             >
               <FormField
                 name="verifyToken"
@@ -127,7 +127,7 @@ export default function forgotPassPage() {
                 control={register.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="form-label">Password</FormLabel>
+                    <FormLabel className="form-label">New Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -152,7 +152,7 @@ export default function forgotPassPage() {
                     <Loader className="mr-2 h-4 w-4 animate-spin" /> please wait
                   </>
                 ) : (
-                  "Sign In"
+                  "Update"
                 )}
               </Button>
             </form>
