@@ -4,10 +4,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -17,62 +16,84 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { signInValidation } from "@/schemas/signinScema";
+import { forgotPasswordValidation } from "@/schemas/forgotPasswordSchema";
 import { useState } from "react";
+import axios from "axios";
+import axiosRetry from "axios-retry";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-export default function signinPage() {
+export default function forgotPassPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
+  const [showMessage, setShowMessage] = useState("");
+
   // now check how to use zod
-  const register = useForm<z.infer<typeof signInValidation>>({
+  const register = useForm<z.infer<typeof forgotPasswordValidation>>({
     // here we can use different resolver, but now we use zod resolver
-    resolver: zodResolver(signInValidation),
+    resolver: zodResolver(forgotPasswordValidation),
     defaultValues: {
-      identifier: "",
-      password: "",
+      verifyToken: "",
+      newPassword: "",
     },
   });
-  const onSubmit = async (data: z.infer<typeof signInValidation>) => {
-    setIsSubitting(true);
 
+  async function onSubmit(data: z.infer<typeof forgotPasswordValidation>) {
     try {
-      const result = await signIn("credentials", {
-        identifier: data.identifier,
-        password: data.password,
-        redirect: false,
-      });
-      if (result?.error) {
+      setIsSubitting(true);
+      setShowMessage("");
+      console.log("form data ", data, " userID: ", userId);
+      const response = await axios.put(
+        `/api/users/forgotPassword?userId=${userId}`,
+        data,
+        { timeout: 30000 }
+      );
+      if (response.data.success) {
         toast({
-          title: "Error",
-          description: result.error,
+          title: "✔ Success",
+          description: response.data.message,
+          variant: "default",
+        });
+        router.replace(`/signin`);
+      } else {
+        toast({
+          title: "Failed",
+          description: response.data.message,
           variant: "destructive",
         });
       }
-      if (result?.url) {
-        router.replace("/dashboard");
-      }
-    } catch (error: any) {
-      setIsSubitting(false);
-      console.log("error in sigin in: ", error?.message || error);
+    } catch (error) {
+      console.log("error in enter code: ", error);
+      const axiosError = error as any;
+      let errorMessage = axiosError.response?.data.message;
+      ("error in enter 6 digit code and new password.");
+
+      toast({
+        title: "FAILED 😒",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      setShowMessage(errorMessage);
     } finally {
       setIsSubitting(false);
     }
-  };
+  }
+
   return (
     <section className="mt-8">
-      <div className="flex flex-col items-start  max-w-sm mx-auto p-6 shadow-md bg-gray-50">
+      <div className="flex flex-col items-start  max-w-md mx-auto p-6 shadow-md bg-gray-50">
         <div className="flex flex-col text-center w-full gap-y-1">
           <h1
             className="text-primary text-4xl font-bold"
             style={{ letterSpacing: "-1.5px" }}
           >
-            Let's get it done.
+            Update Your Password.
           </h1>
           <p className="mb-4 text-secondry font-semibold text-sm leading-5">
-            login to continue
+            check your email and enter 6 digit code
           </p>
         </div>
         <div className="w-full">
@@ -82,19 +103,17 @@ export default function signinPage() {
               className="space-y-2"
             >
               <FormField
-                name="identifier"
+                name="verifyToken"
                 control={register.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="identifier" className="form-label">
-                      Email/Username
-                    </FormLabel>
+                    <FormLabel className="form-label">Token Code</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="username/email"
+                        placeholder="enter 6 digit code"
                         {...field}
-                        name="identifier"
+                        name="verifyToken"
                       />
                     </FormControl>
 
@@ -104,7 +123,7 @@ export default function signinPage() {
               />
 
               <FormField
-                name="password"
+                name="newPassword"
                 control={register.control}
                 render={({ field }) => (
                   <FormItem>
@@ -112,9 +131,9 @@ export default function signinPage() {
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="password"
+                        placeholder="enter new password"
                         {...field}
-                        name="password"
+                        name="newPassword"
                       />
                     </FormControl>
 
@@ -122,25 +141,7 @@ export default function signinPage() {
                   </FormItem>
                 )}
               />
-              <div className="w-full flex justify-between items-center">
-                <div className="flex space-x-1 items-center">
-                  <Checkbox id="remember" className="w-3.5 h-3.5" />
-                  <label
-                    htmlFor="remember"
-                    className="text-xs text-secondry font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Remember me
-                  </label>
-                </div>
-                <div>
-                  <Link
-                    href={"/emailForgotPassword"}
-                    className="text-xs text-secondry font-medium leading-none peer-disabled:opacity-70"
-                  >
-                    forgot password?
-                  </Link>
-                </div>
-              </div>
+
               <Button
                 type="submit"
                 className="w-full text-white"
@@ -156,6 +157,21 @@ export default function signinPage() {
               </Button>
             </form>
           </Form>
+        </div>
+        <div className="w-full mt-2">
+          {showMessage && (
+            <div className="flex flex-col items-center">
+              <p className="text-red-500 text-md font-semibold leading-3 text-center p-3">
+                {showMessage}
+              </p>
+              <Link
+                href={"/emailForgotPassword"}
+                className="text-secondry font-semibold"
+              >
+                Re-Generate
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       <div className="text-center mt-4">

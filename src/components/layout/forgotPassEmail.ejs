@@ -1,0 +1,13 @@
+<p
+  style="background-color: rgb(131, 100, 100); color: black; font-size: x-large"
+>
+  to <%= emailType === "VERIFY" ? 'verify your email' : 'reset your password' %>
+  your 6 digit code is. <br />
+  <%= hashedToken %> <br />
+  Click
+  <a
+    style="color: rebeccapurple; text-underline-position: below"
+    href="<%= domain %>/forgotPassword?userId=<%= userId %>"
+    >here</a
+  >
+</p>

@@ -11,7 +11,7 @@ export const sendEmail = async (
   client: PoolClient | null = null
 ) => {
   let localClient = client;
-
+  let hashedToken;
   try {
     const releaseClient = !client; // Flag to determine if we need to release the client
 
@@ -19,17 +19,31 @@ export const sendEmail = async (
       localClient = await pool.connect();
     }
 
-    const hashedToken = uuidv4();
-    const template = fs.readFileSync(
-      "src/components/layout/emailTemplate.ejs",
-      "utf8"
-    );
+    if (emailType === "VERIFY") {
+      hashedToken = uuidv4();
+    } else if (emailType === "RESET") {
+      // generate 6 digit code
+      hashedToken = Math.floor(100000 + Math.random() * 900000).toString();
+    }
+    let templateForEmailVerification = "";
+    if (emailType === "VERIFY") {
+      templateForEmailVerification = fs.readFileSync(
+        "src/components/layout/emailTemplate.ejs",
+        "utf8"
+      );
+    } else if (emailType === "RESET") {
+      templateForEmailVerification = fs.readFileSync(
+        "src/components/layout/forgotPassEmail.ejs",
+        "utf8"
+      );
+    }
 
     // Render the EJS template with the required data
-    const htmlTemplate = ejs.render(template, {
+    const htmlTemplate = ejs.render(templateForEmailVerification, {
       domain: process.env.DOMAIN,
       hashedToken,
       emailType,
+      userId,
     });
 
     const fromEmail = process.env.SEND_FROM_EMAIL;
@@ -47,12 +61,12 @@ export const sendEmail = async (
       }
     } else if (emailType === "RESET") {
       const timestamp = Date.now() + 3600000; // Adds 1 hour to the current timestamp
-      const tokenExpiry = new Date(timestamp).toISOString(); // Converts timestamp to ISO format
+      const tokenForgotPasswordExpiry: any = new Date(timestamp); // Converts timestamp to ISO format
 
       await localClient.query("BEGIN");
       await localClient.query(
-        `UPDATE users SET "forgotPasswordToken" = $1, "forgotPasswordExpiry" = $2 WHERE id = $3`,
-        [hashedToken, tokenExpiry, userId]
+        `UPDATE users SET "forgotpasswordtoken" = $1, "forgotpasswordexpiry" = $2 WHERE id = $3`,
+        [hashedToken, tokenForgotPasswordExpiry, userId]
       );
       if (!client && localClient) {
         await localClient.query("COMMIT");
@@ -72,14 +86,14 @@ export const sendEmail = async (
 
     const mailOptions = {
       from: <any>{
-        name: "Streak App Email Verification 👻",
+        name: "Streak App 👻",
         address: fromEmail,
       },
       to: toEmailAddress,
       subject:
         emailType === "VERIFY"
           ? "VERIFY YOUR EMAIL ADDRESS FOR STREAK APP"
-          : "RESET YOUR PASSWORD",
+          : "RESET YOUR PASSWORD FOR STREAK App",
       html: htmlTemplate,
     };
 
