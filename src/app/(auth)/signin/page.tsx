@@ -46,6 +46,7 @@ export default function signinPage() {
       });
       if (result?.error) {
         toast({
+          className: "bg-red-500 text-white",
           title: "Error",
           description: result.error,
           variant: "destructive",
