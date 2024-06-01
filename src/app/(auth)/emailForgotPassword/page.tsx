@@ -98,6 +98,7 @@ export default function emailForgotPage() {
                     <FormLabel className="form-label">Email</FormLabel>
                     <FormControl>
                       <Input
+                        className="text-black"
                         type="text"
                         placeholder="email"
                         {...field}

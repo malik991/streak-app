@@ -27,7 +27,7 @@ export default function Header() {
             </span>
           </Link>
         </nav>
-        <nav className="flex items-center lg:gap-x-5 font-semibold">
+        <nav className="flex items-center md:gap-x-5 gap-x-3 font-semibold">
           <AuthNavigation
             userName={userName?.toString() || ""}
             status={session?.status || "unauthenticated"}

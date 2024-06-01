@@ -8,7 +8,10 @@ export default function Footer() {
   return (
     <div className="p-3">
       <footer className="border-t-2 mt-8 pt-8 ">
-        <div className="flex justify-between items-center">
+        <div
+          className="flex md:flex-row flex-col md:justify-between
+         justify-center items-center md:gap-y-0 gap-y-4"
+        >
           <div>
             <span className="text-lg text-gray-500">
               Made with 💖 by{" "}

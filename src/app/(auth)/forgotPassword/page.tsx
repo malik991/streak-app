@@ -111,6 +111,7 @@ export default function forgotPassPage() {
                     <FormLabel className="form-label">Token Code</FormLabel>
                     <FormControl>
                       <Input
+                        className="text-black"
                         type="text"
                         placeholder="enter 6 digit code"
                         {...field}
@@ -131,6 +132,7 @@ export default function forgotPassPage() {
                     <FormLabel className="form-label">New Password</FormLabel>
                     <FormControl>
                       <Input
+                        className="text-black"
                         type="password"
                         placeholder="enter new password"
                         {...field}
@@ -152,6 +154,7 @@ export default function forgotPassPage() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        className="text-black"
                         type="password"
                         placeholder="re-enter password"
                         {...field}

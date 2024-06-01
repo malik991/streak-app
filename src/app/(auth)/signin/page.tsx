@@ -92,6 +92,7 @@ export default function signinPage() {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        className="text-black"
                         type="text"
                         placeholder="username/email"
                         {...field}
@@ -112,6 +113,7 @@ export default function signinPage() {
                     <FormLabel className="form-label">Password</FormLabel>
                     <FormControl>
                       <Input
+                        className="text-black"
                         type="password"
                         placeholder="password"
                         {...field}

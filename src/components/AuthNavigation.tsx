@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, MenuIcon } from "lucide-react";
 import DropdownMenuDemo from "@/components/dropDownMenu/index";
 import { ModeToggle } from "./dropDownMenu/darkLightMode";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useToast } from "./ui/use-toast";
+import DropdownMenuMobile from "./dropDownMenu/mobileMenue";
 
 export interface AuthNavigationProps {
   userName: string;
@@ -97,15 +98,18 @@ function AuthNavigation(inputParam: AuthNavigationProps): any {
   } else {
     return (
       <>
-        <Link href="/signin" className="text-secondry text-lg">
+        <Link href="/signin" className="text-secondry text-lg hidden md:block">
           Login
         </Link>
         <Link
           href="/signup"
-          className="bg-primary px-5 py-1 text-white rounded-lg"
+          className="bg-primary px-5 py-1 text-white rounded-lg hidden md:block"
         >
           Register
         </Link>
+        <span className="md:hidden block">
+          <DropdownMenuMobile />
+        </span>
         <ModeToggle />
       </>
     );
