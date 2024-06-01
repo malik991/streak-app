@@ -15,4 +15,10 @@ export const signUpValidation = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
+  termsCheckbox: z
+    .boolean()
+    .refine(
+      (value) => value === true,
+      "You must agree to the terms and conditions"
+    ),
 });

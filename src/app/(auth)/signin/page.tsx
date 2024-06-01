@@ -64,7 +64,7 @@ export default function signinPage() {
   };
   return (
     <section className="mt-8">
-      <div className="flex flex-col items-start  max-w-sm mx-auto p-6 shadow-md bg-gray-50">
+      <div className="flex flex-col items-start  max-w-sm mx-auto p-6 shadow-md bg-gray-50 rounded-md">
         <div className="flex flex-col text-center w-full gap-y-1">
           <h1
             className="text-primary text-4xl font-bold"

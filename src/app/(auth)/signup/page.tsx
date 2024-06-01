@@ -39,6 +39,7 @@ export default function signupPage() {
       username: "",
       email: "",
       password: "",
+      termsCheckbox: false,
     },
   });
 
@@ -74,6 +75,8 @@ export default function signupPage() {
   }, [username]);
 
   const onSubmit = async (data: z.infer<typeof signUpValidation>) => {
+    console.log(data);
+
     setIsSubitting(true);
     try {
       const res = await axios.post("/api/users/signup", data);
@@ -133,17 +136,18 @@ export default function signupPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="form-label">User Name</FormLabel>
-                    <Input
-                      className=""
-                      placeholder="username"
-                      type="text"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        debounced(e.target.value);
-                      }}
-                    />
-
+                    <FormControl>
+                      <Input
+                        className=""
+                        placeholder="username"
+                        type="text"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          debounced(e.target.value);
+                        }}
+                      />
+                    </FormControl>
                     {isLoadingUsername && <Loader className="animate-spin" />}
                     {!isLoadingUsername && usernameMessage && (
                       <p
@@ -166,8 +170,14 @@ export default function signupPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="form-label">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="enter email"
+                        {...field}
+                      />
+                    </FormControl>
 
-                    <Input type="email" placeholder="enter email" {...field} />
                     <p className="text-muted text-secondry font-semibold text-xs">
                       * We will send you a verification email
                     </p>
@@ -182,17 +192,47 @@ export default function signupPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="form-label">Password</FormLabel>
-                    <Input
-                      type="password"
-                      placeholder="password"
-                      {...field}
-                      name="password"
-                    />
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                        name="password"
+                      />
+                    </FormControl>
+
                     <FormMessage className="text-red-500" />
                   </FormItem>
                 )}
               />
-              <div className="w-full flex items-start py-2">
+              <FormField
+                control={register.control}
+                name="termsCheckbox"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex gap-x-2 items-center">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel
+                        className="text-xs text-secondry font-medium leading-none
+                     peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        by signup, you are agree with our{" "}
+                        <span className="underline text-black">
+                          user aggrement
+                        </span>
+                      </FormLabel>
+                    </div>
+
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+              {/* <div className="w-full flex items-start py-2">
                 <div className="flex space-x-1 items-center">
                   <Checkbox id="terms1" className="w-3.5 h-3.5" />
                   <label
@@ -203,7 +243,7 @@ export default function signupPage() {
                     <span className="underline text-black">user aggrement</span>
                   </label>
                 </div>
-              </div>
+              </div> */}
               <Button
                 type="submit"
                 className="w-full text-white"

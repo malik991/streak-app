@@ -38,6 +38,7 @@ export default function forgotPassPage() {
     defaultValues: {
       verifyToken: "",
       newPassword: "",
+      passwordConfirm: "",
     },
   });
 
@@ -134,6 +135,26 @@ export default function forgotPassPage() {
                         placeholder="enter new password"
                         {...field}
                         name="newPassword"
+                      />
+                    </FormControl>
+
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="passwordConfirm"
+                control={register.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="form-label">
+                      Confirm Password
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="re-enter password"
+                        {...field}
                       />
                     </FormControl>
 

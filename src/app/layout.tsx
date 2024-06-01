@@ -5,6 +5,7 @@ import AuthProvider from "@/context/authProvider";
 import Hearder from "@/components/layout/Hearder";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -21,14 +22,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <main className="max-w-7xl mx-auto p-4">
-          <AuthProvider>
-            <Hearder />
-            <Toaster />
-            {children}
-            <Footer />
-          </AuthProvider>
-        </main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <main className="max-w-7xl mx-auto p-4">
+            <AuthProvider>
+              <Hearder />
+              <Toaster />
+              {children}
+              <Footer />
+            </AuthProvider>
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

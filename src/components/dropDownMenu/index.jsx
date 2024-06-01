@@ -8,10 +8,10 @@ import {
 } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, PersonStandingIcon, Settings } from "lucide-react";
-import Link from "next/link";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
-const DropdownMenuDemo = () => {
+const DropdownMenuDemo = ({ linkimage }) => {
   const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
   const [urlsChecked, setUrlsChecked] = React.useState(false);
   const [person, setPerson] = React.useState("pedro");
@@ -40,7 +40,7 @@ const DropdownMenuDemo = () => {
               <span>My Account</span>
               <Avatar className="w-6 h-6 ml-auto">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={linkimage ? linkimage : "https://github.com/shadcn.png"}
                   alt="Profile"
                 />
                 <AvatarFallback>CN</AvatarFallback>
@@ -70,10 +70,7 @@ const DropdownMenuDemo = () => {
               </div>
             </Link>
           </DropdownMenu.Item>
-          <DropdownMenu.Item
-            asChild
-            className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] px-[5px] relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
-          >
+          <DropdownMenu.Item className="group text-[13px] leading-none text-violet11 rounded-[3px] flex items-center h-[25px] px-[5px] relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1">
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="w-full flex items-center"
