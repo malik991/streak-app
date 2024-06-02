@@ -2,12 +2,14 @@
 
 import FaqPage from "@/components/layout/FAQ";
 import CarouselPage, { CarouselOrientation } from "@/components/myCarsol";
+import { Icons } from "@/components/sparkelsIcon/Icon";
 
 export default function Home() {
   return (
     <>
       <section className="my-6">
         <div className=" w-full flex flex-col gap-y-9 p-4 items-center">
+          <Icons.Sparkles className="h-16 w-16" />
           <div className="p-1">
             <h1 className="md:text-8xl text-4xl text-primary font-bold tracking-tighter">
               WELCOME TO STREAK

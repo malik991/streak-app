@@ -32,7 +32,7 @@ export default function CarouselPage() {
           <CarouselItem key={index}>
             <div className="p-1">
               <Card>
-                <CardContent className="flex aspect-auto items-center justify-center p-4 relative ">
+                <CardContent className="flex aspect-auto items-center justify-center p-4 relative">
                   {/* <span className="text-4xl font-semibold">{item}</span> */}
                   {/* md:h-[80vh] h-[50vh] */}
                   <Image
@@ -40,13 +40,13 @@ export default function CarouselPage() {
                     priority={true}
                     src={item}
                     alt={`slide ${index + 1}`}
-                    // width={1000}
-                    // height={1000}
+                    width={1000}
+                    height={1000}
                     //fill={true}
                     style={{
                       objectFit: "contain",
-                      width: "auto",
-                      height: "auto",
+                      // width: "auto",
+                      // height: "auto",
                     }}
                   />
                 </CardContent>

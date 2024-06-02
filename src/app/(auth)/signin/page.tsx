@@ -22,6 +22,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 
+import PasswordInputPage from "@/components/passwordInput";
+
 export default function signinPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
@@ -63,8 +65,8 @@ export default function signinPage() {
     }
   };
   return (
-    <section className="mt-8">
-      <div className="flex flex-col items-start  max-w-sm mx-auto p-6 shadow-md bg-gray-50 rounded-md">
+    <section className="md:mt-8 my:9">
+      <div className="md:mt-8 mt-11 flex flex-col items-start  max-w-sm mx-auto p-6 shadow-md bg-gray-50 rounded-md">
         <div className="flex flex-col text-center w-full gap-y-1">
           <h1
             className="text-primary text-4xl font-bold"
@@ -92,7 +94,7 @@ export default function signinPage() {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="text-black"
+                        className="text-black text-sm font-semibold"
                         type="text"
                         placeholder="username/email"
                         {...field}
@@ -112,13 +114,14 @@ export default function signinPage() {
                   <FormItem>
                     <FormLabel className="form-label">Password</FormLabel>
                     <FormControl>
-                      <Input
+                      <PasswordInputPage fieldValue={{ ...field }} />
+                      {/* <Input
                         className="text-black"
                         type="password"
                         placeholder="password"
                         {...field}
                         name="password"
-                      />
+                      /> */}
                     </FormControl>
 
                     <FormMessage className="text-red-500" />

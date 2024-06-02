@@ -12,7 +12,6 @@ import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,6 +22,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import Link from "next/link";
+import PasswordInputPage from "@/components/passwordInput";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 export default function signupPage() {
@@ -110,8 +110,8 @@ export default function signupPage() {
   };
 
   return (
-    <section className="mt-8">
-      <div className="flex flex-col items-start gap-y-3 max-w-sm mx-auto p-6 shadow-md bg-gray-50 rounded-md">
+    <section className="md:mt-8 mt:9">
+      <div className="md:mt-8 mt-11 flex flex-col items-start gap-y-3 max-w-sm mx-auto p-6 shadow-md bg-gray-50 rounded-md">
         <div className="">
           <h1
             className="text-primary text-4xl"
@@ -138,7 +138,7 @@ export default function signupPage() {
                     <FormLabel className="form-label">User Name</FormLabel>
                     <FormControl>
                       <Input
-                        className="text-black"
+                        className="text-black text-sm font-semibold"
                         placeholder="username"
                         type="text"
                         {...field}
@@ -160,7 +160,7 @@ export default function signupPage() {
                         {usernameMessage}
                       </p>
                     )}
-                    <FormMessage className="text-red-500" />
+                    <FormMessage className="text-red-500 font-semibold" />
                   </FormItem>
                 )}
               />
@@ -172,7 +172,7 @@ export default function signupPage() {
                     <FormLabel className="form-label">Email</FormLabel>
                     <FormControl>
                       <Input
-                        className="text-black"
+                        className="text-black text-sm font-semibold"
                         type="email"
                         placeholder="enter email"
                         {...field}
@@ -194,13 +194,7 @@ export default function signupPage() {
                   <FormItem>
                     <FormLabel className="form-label">Password</FormLabel>
                     <FormControl>
-                      <Input
-                        className="text-black"
-                        type="password"
-                        placeholder="password"
-                        {...field}
-                        name="password"
-                      />
+                      <PasswordInputPage fieldValue={{ ...field }} />
                     </FormControl>
 
                     <FormMessage className="text-red-500" />

@@ -7,7 +7,7 @@ input[type="email"],
 input[type="password"],
 input[type="text"] {
     @apply block w-full mb-2 rounded-lg;
-    @apply border p-2 border-secondry bg-gray-100;
+    @apply border p-2 border-secondry bg-terniry;
 }
 
 .form-label{
