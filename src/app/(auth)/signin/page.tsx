@@ -24,7 +24,7 @@ import { signIn } from "next-auth/react";
 
 import PasswordInputPage from "@/components/passwordInput";
 
-export default function signinPage() {
+export default function SigninPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
   const router = useRouter();
@@ -72,7 +72,7 @@ export default function signinPage() {
             className="text-primary text-4xl font-bold"
             style={{ letterSpacing: "-1.5px" }}
           >
-            Let's get it done.
+            Let&#39;s get it done.
           </h1>
           <p className="mb-4 text-secondry font-semibold text-sm leading-5">
             login to continue

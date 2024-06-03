@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -24,12 +24,12 @@ import Link from "next/link";
 import PasswordInputPage from "@/components/passwordInput";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-export default function forgotPassPage() {
+export default function ForgotPassPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const userId = searchParams.get("userId");
+  const { userId } = useParams();
+  //const userId = searchParams.get("userId");
   const [showMessage, setShowMessage] = useState("");
 
   // now check how to use zod
@@ -47,7 +47,6 @@ export default function forgotPassPage() {
     try {
       setIsSubitting(true);
       setShowMessage("");
-      console.log("form data ", data, " userID: ", userId);
       const response = await axios.put(
         `/api/users/forgotPassword?userId=${userId}`,
         data,
@@ -82,6 +81,10 @@ export default function forgotPassPage() {
     } finally {
       setIsSubitting(false);
     }
+  }
+
+  if (typeof window === "undefined") {
+    return null; // Return null during server-side rendering
   }
 
   return (

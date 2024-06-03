@@ -25,7 +25,7 @@ import Link from "next/link";
 import PasswordInputPage from "@/components/passwordInput";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-export default function signupPage() {
+export default function SignupPage() {
   const { toast } = useToast();
   const [username, setUsername] = useState("");
   const [isSubmitting, setIsSubitting] = useState(false);

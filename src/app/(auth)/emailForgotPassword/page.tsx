@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -26,7 +25,7 @@ const emailForForgotPass = z.object({
   email: z.string().email({ message: "email is not valid 💀" }),
 });
 
-export default function emailForgotPage() {
+export default function EmailForgotPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
   const [showMessage, setShowMessage] = useState("");

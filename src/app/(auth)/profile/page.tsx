@@ -37,7 +37,7 @@ interface userIdInterface {
   userId: string;
 }
 
-export default function profilePage() {
+export default function ProfilePage() {
   const [userId, setUserId] = useState<userIdInterface | null>(null);
   //const [userProfile, setUserProfile] = useState<UserProfile[]>([]);
   const [userProfile, setUserProfile] =
