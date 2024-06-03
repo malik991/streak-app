@@ -19,6 +19,7 @@ import { useState } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 const emailForForgotPass = z.object({
@@ -29,7 +30,7 @@ export default function EmailForgotPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
   const [showMessage, setShowMessage] = useState("");
-  //const router = useRouter();
+  const router = useRouter();
   // now check how to use zod
   const register = useForm<z.infer<typeof emailForForgotPass>>({
     // here we can use different resolver, but now we use zod resolver
@@ -48,9 +49,12 @@ export default function EmailForgotPage() {
         toast({
           title: "Success",
           description: res.data.message,
+          className: "bg-green-500 text-white",
         });
         setShowMessage(res?.data?.message);
-        //router.replace(`/forgotPassword`);
+        const userId = res.data.data.id;
+
+        router.replace(`/forgotPassword/${userId}`);
       }
     } catch (error) {
       console.log("error in email forgot for password: ", error);

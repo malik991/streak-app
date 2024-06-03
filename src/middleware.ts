@@ -40,7 +40,7 @@ export const config = {
     "/signin",
     "/signup",
     "/emailForgotPassword",
-    "/forgotPassword",
+    "/forgotPassword/:path*",
     "/",
     "/verifyemail/:path*",
   ],

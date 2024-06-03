@@ -55,6 +55,11 @@ export default function SigninPage() {
         });
       }
       if (result?.url) {
+        toast({
+          title: "✔ WELCOME",
+          description: "successfully login",
+          className: "bg-green-500 text-white",
+        });
         router.replace("/dashboard");
       }
     } catch (error: any) {

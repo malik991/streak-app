@@ -1,5 +1,4 @@
 "use client";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,22 +16,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { forgotPasswordValidation } from "@/schemas/forgotPasswordSchema";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import Link from "next/link";
 import PasswordInputPage from "@/components/passwordInput";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-export default function ForgotPassPage() {
+export default function ForgotPasswordPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubitting] = useState(false);
   const router = useRouter();
   const { userId } = useParams();
-  //const userId = searchParams.get("userId");
   const [showMessage, setShowMessage] = useState("");
-
-  // now check how to use zod
   const register = useForm<z.infer<typeof forgotPasswordValidation>>({
     // here we can use different resolver, but now we use zod resolver
     resolver: zodResolver(forgotPasswordValidation),
@@ -57,6 +53,7 @@ export default function ForgotPassPage() {
           title: "✔ Success",
           description: response.data.message,
           variant: "default",
+          className: "bg-green-500 text-white",
         });
         router.replace(`/signin`);
       } else {
@@ -76,16 +73,14 @@ export default function ForgotPassPage() {
         title: "FAILED 😒",
         description: errorMessage,
         variant: "destructive",
+        className: "bg-red-500 text-white",
       });
       setShowMessage(errorMessage);
     } finally {
       setIsSubitting(false);
     }
   }
-
-  if (typeof window === "undefined") {
-    return null; // Return null during server-side rendering
-  }
+  //console.log(userId);
 
   return (
     <section className="mt-8">

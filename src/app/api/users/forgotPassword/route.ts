@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       {
         success: true,
         message: "PLEASE CHECK YOUR EMAIL",
-        data: email,
+        data: result.rows[0],
       },
       { status: 200 }
     );
@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest) {
   const { verifyToken, newPassword } = await req.json();
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId");
-  //console.log(userId, " ", verifyToken, " ", newPassword);
+  console.log(userId, " ", verifyToken, " ", newPassword);
 
   if (!verifyToken || !newPassword) {
     return NextResponse.json(
