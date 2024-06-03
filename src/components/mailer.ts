@@ -7,6 +7,7 @@ import fs from "fs";
 import ejs from "ejs";
 //import { PoolClient } from "pg";
 import { VercelPoolClient } from "@vercel/postgres";
+import path from "path";
 
 export const sendEmail = async (
   { toEmailAddress, emailType, userId }: emailOptions,
@@ -29,15 +30,17 @@ export const sendEmail = async (
     }
     let templateForEmailVerification = "";
     if (emailType === "VERIFY") {
-      templateForEmailVerification = fs.readFileSync(
-        "src/components/layout/emailTemplate.ejs",
-        "utf8"
+      const verifyPath = path.resolve(
+        process.cwd(),
+        "src/components/layout/emailTemplate.ejs"
       );
+      templateForEmailVerification = fs.readFileSync(verifyPath, "utf8");
     } else if (emailType === "RESET") {
-      templateForEmailVerification = fs.readFileSync(
-        "src/components/layout/forgotPassEmail.ejs",
-        "utf8"
+      const forgotPath = path.resolve(
+        process.cwd(),
+        "src/components/layout/forgotPassEmail.ejs"
       );
+      templateForEmailVerification = fs.readFileSync(forgotPath, "utf8");
     }
 
     // Render the EJS template with the required data
