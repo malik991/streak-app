@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -45,6 +45,7 @@ export default function SigninPage() {
         identifier: data.identifier,
         password: data.password,
         redirect: false,
+        //callbackUrl: "/dashboard",
       });
       if (result?.error) {
         toast({
@@ -55,11 +56,14 @@ export default function SigninPage() {
         });
       }
       if (result?.url) {
-        // toast({
-        //   title: "✔ WELCOME",
-        //   description: "successfully login",
-        //   className: "bg-green-500 text-white",
-        // });
+        console.log("url: ", result.url);
+
+        toast({
+          title: "✔ WELCOME",
+          description: "successfully login",
+          className: "bg-green-500 text-white",
+        });
+        //return redirect("/dashboard");
         router.replace("/dashboard");
       }
     } catch (error: any) {
