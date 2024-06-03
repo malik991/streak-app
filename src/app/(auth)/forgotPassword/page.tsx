@@ -21,6 +21,7 @@ import { useState } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import Link from "next/link";
+import PasswordInputPage from "@/components/passwordInput";
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 export default function forgotPassPage() {
@@ -131,13 +132,7 @@ export default function forgotPassPage() {
                   <FormItem>
                     <FormLabel className="form-label">New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        className="text-black"
-                        type="password"
-                        placeholder="enter new password"
-                        {...field}
-                        name="newPassword"
-                      />
+                      <PasswordInputPage fieldValue={{ ...field }} />
                     </FormControl>
 
                     <FormMessage className="text-red-500" />
@@ -153,12 +148,7 @@ export default function forgotPassPage() {
                       Confirm Password
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        className="text-black"
-                        type="password"
-                        placeholder="re-enter password"
-                        {...field}
-                      />
+                      <PasswordInputPage fieldValue={{ ...field }} />
                     </FormControl>
 
                     <FormMessage className="text-red-500" />

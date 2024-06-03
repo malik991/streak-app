@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import pool from "@/lib/DbConnection";
+//import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
 import bcryptjs from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
@@ -17,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any): Promise<any> {
-        const client = await pool.connect();
+        const client = await db.connect();
         try {
           const getUser = await client.query(
             "SELECT * FROM users WHERE email = $1 or username = $1 LIMIT 1",
@@ -31,7 +32,7 @@ export const authOptions: NextAuthOptions = {
           const user = getUser.rows[0];
 
           // Check if the email is verified
-          if (!user.isVerified) {
+          if (!user.isverified) {
             throw new Error("Email not verified");
           }
 

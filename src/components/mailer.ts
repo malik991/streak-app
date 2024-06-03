@@ -1,14 +1,16 @@
 import nodemailer from "nodemailer";
 import { emailOptions } from "@/types/emailOptions";
 import { v4 as uuidv4 } from "uuid";
-import pool from "@/lib/DbConnection";
+//import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
 import fs from "fs";
 import ejs from "ejs";
-import { PoolClient } from "pg";
+//import { PoolClient } from "pg";
+import { VercelPoolClient } from "@vercel/postgres";
 
 export const sendEmail = async (
   { toEmailAddress, emailType, userId }: emailOptions,
-  client: PoolClient | null = null
+  client: VercelPoolClient | null = null
 ) => {
   let localClient = client;
   let hashedToken;
@@ -16,7 +18,7 @@ export const sendEmail = async (
     const releaseClient = !client; // Flag to determine if we need to release the client
 
     if (!localClient) {
-      localClient = await pool.connect();
+      localClient = await db.connect();
     }
 
     if (emailType === "VERIFY") {

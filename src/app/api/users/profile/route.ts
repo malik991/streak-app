@@ -1,4 +1,5 @@
-import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
+//import pool from "@/lib/DbConnection";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -13,7 +14,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     let result: any;
     if (email) {
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
       { status: 404 }
     );
   }
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     await client.query("BEGIN");
     const checkUserExist = await client.query(

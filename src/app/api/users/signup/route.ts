@@ -1,4 +1,5 @@
-import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
+//import pool from "@/lib/DbConnection";
 import bcryptjs from "bcryptjs";
 import { sendEmail } from "@/components/mailer";
 import { emailOptions } from "@/types/emailOptions";
@@ -11,10 +12,10 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const emailExist = await client.query(
-      `select * from users where email = $1 and "isVerified" = true`,
+      `select * from users where email = $1 and isverified = true`,
       [email]
     );
     if (emailExist.rows.length > 0) {

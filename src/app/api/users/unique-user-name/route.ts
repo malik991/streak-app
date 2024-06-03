@@ -1,4 +1,5 @@
-import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
+//import pool from "@/lib/DbConnection";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -13,10 +14,10 @@ export async function GET(req: NextRequest) {
       message: "user name is mendatory",
     });
   }
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const result = await client.query(
-      `select * from users where username = $1 AND "isVerified" = true`,
+      `select * from users where username = $1 AND isverified = true`,
       [queryParam.username]
     );
     if (result.rows.length > 0) {

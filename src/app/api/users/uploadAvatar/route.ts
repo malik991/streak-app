@@ -1,4 +1,5 @@
-import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
+//import pool from "@/lib/DbConnection";
 import { NextRequest, NextResponse } from "next/server";
 import {
   UploadImage,
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const responseData: any = await UploadImage(image, "streak-app");
     if (!responseData) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import pool from "@/lib/DbConnection";
+//import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
 import { emailOptions } from "@/types/emailOptions";
 import { sendEmail } from "@/components/mailer";
 import bcryptJs from "bcryptjs";
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const result = await client.query("select * from users where email = $1", [
       email,
@@ -63,7 +64,7 @@ export async function PUT(req: NextRequest) {
   const { verifyToken, newPassword } = await req.json();
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId");
-  console.log(userId, " ", verifyToken, " ", newPassword);
+  //console.log(userId, " ", verifyToken, " ", newPassword);
 
   if (!verifyToken || !newPassword) {
     return NextResponse.json(
@@ -84,7 +85,7 @@ export async function PUT(req: NextRequest) {
     );
   }
   const password_hash = await bcryptJs.hash(newPassword, 10);
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const result = await client.query(
       "select * from users where id = $1 AND forgotpasswordtoken = $2 AND forgotpasswordexpiry > CURRENT_TIMESTAMP ",
@@ -117,7 +118,7 @@ export async function PUT(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    await pool.query("ROLLBACK");
+    await db.query("ROLLBACK");
     console.log(
       "error while using PUT method of verifyToken for forgot password: ",
       error

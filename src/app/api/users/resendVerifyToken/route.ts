@@ -1,4 +1,5 @@
-import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
+//import pool from "@/lib/DbConnection";
 import { sendEmail } from "@/components/mailer";
 import { emailOptions } from "@/types/emailOptions";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,10 +12,10 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const user = await client.query(
-      `SELECT id, "isVerified" FROM users WHERE email = $1`,
+      `SELECT id, isverified FROM users WHERE email = $1`,
       [email]
     );
     if (user.rows.length === 0) {
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
-    if (user.rows[0]?.isVerified) {
+    if (user.rows[0]?.isverified) {
       return NextResponse.json(
         { success: false, message: "Email already verified" },
         { status: 400 }

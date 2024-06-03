@@ -1,4 +1,5 @@
-import pool from "@/lib/DbConnection";
+import { db } from "@vercel/postgres";
+//import pool from "@/lib/DbConnection";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     const checkUserFromToken = await client.query(
       `SELECT * FROM USERS WHERE "verifytoken" = $1 AND "verifytokenexpiry" > CURRENT_TIMESTAMP`,
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
     const userId = checkUserFromToken.rows[0].id;
     const updateUserQuery = `
   UPDATE USERS
-  SET "isVerified" = true,
+  SET "isverified" = true,
       "verifytoken" = NULL,
       "verifytokenexpiry" = NULL
   WHERE id = $1
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    await pool.query("ROLLBACK");
+    await db.query("ROLLBACK");
     console.error("error in verify token API: ", error);
     return NextResponse.json(
       {
